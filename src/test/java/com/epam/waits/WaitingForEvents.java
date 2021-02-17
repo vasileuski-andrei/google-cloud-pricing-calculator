@@ -34,6 +34,10 @@ public class WaitingForEvents {
         getWaitedElement(ExpectedConditions.visibilityOf(element)).click();
     }
 
+    public void waitForAppearanceClickableElementAndClick(WebElement element) {
+        getWaitedElement(ExpectedConditions.elementToBeClickable(element)).click();
+    }
+
     public void waitForAppearanceElementLocatedBy(By by) {
         waitForCondition(ExpectedConditions.presenceOfElementLocated(by));
     }

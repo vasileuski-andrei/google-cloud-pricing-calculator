@@ -88,7 +88,7 @@ public class PricingCalculatorPage extends BasePage {
     }
 
     public PricingCalculatorPage selectElementFromMenuMachineClass(String element) {
-        waitingForEvents.waitForAppearanceElementAndClick(menuMachineClass);
+        waitingForEvents.waitForAppearanceClickableElementAndClick(menuMachineClass);
         waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//md-option[@id='select_option_78' or @id='select_option_79']/div[contains (text(),'" +element+ "')]"));
         return this;
     }
@@ -113,7 +113,7 @@ public class PricingCalculatorPage extends BasePage {
     }
 
     public PricingCalculatorPage selectElementFromMenuTypeGPU(String element) {
-        typeGPU.click();
+        waitingForEvents.waitForAppearanceClickableElementAndClick(typeGPU);
         waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']"));
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
         return this;
