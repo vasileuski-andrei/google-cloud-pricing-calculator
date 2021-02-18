@@ -13,6 +13,9 @@ public class DriverSingleton {
 
     private DriverSingleton() {}
 
+    /**
+     *This method is using WebDriverManager dependency by bonigarcia.
+     */
     public static WebDriver getDriver() {
 
         if (driver == null) {

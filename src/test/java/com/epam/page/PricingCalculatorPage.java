@@ -1,5 +1,6 @@
 package com.epam.page;
 
+import com.epam.service.ComputeEngineCreator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -48,30 +49,25 @@ public class PricingCalculatorPage extends BasePage {
     @FindBy(xpath = "//button[@id='email_quote']")
     private WebElement emailEstimateButton;
 
-    public PricingCalculatorPage switchToFrame(String frameName) {
+    public void switchToFrame(String frameName) {
         waitingForEvents.waitForAppearanceFrame(0);
         driver.switchTo().frame(frameName);
-        return this;
     }
 
-    public PricingCalculatorPage inputNumberOfInstances(String number) {
+    public void inputNumberOfInstances(String number) {
         numberOfInstances.sendKeys(number);
-        return this;
     }
 
-    public PricingCalculatorPage selectCheckBoxAddGPU() {
+    public void selectCheckBoxAddGPU() {
         checkBoxAddGPU.click();
-        return this;
     }
 
-    public PricingCalculatorPage clickSectionComputeEngine() {
+    public void clickSectionComputeEngine() {
         waitingForEvents.waitForAppearanceElementAndClick(sectionComputeEngine);
-        return this;
     }
 
-    public PricingCalculatorPage clickAddToEstimateButton() {
+    public void clickAddToEstimateButton() {
         addToEstimateButton.click();
-        return this;
     }
 
     public EmailYourEstimatePage clickEmailEstimateButton() {
@@ -79,94 +75,120 @@ public class PricingCalculatorPage extends BasePage {
         return new EmailYourEstimatePage();
     }
 
-    public PricingCalculatorPage selectElementFromMenuOperatingSystemAndSoftware(String element) {
+    public void selectElementFromMenuOperatingSystemAndSoftware(String element) {
         waitingForEvents.waitForAppearanceElementAndClick(menuOperatingSystemAndSoftware);
         By operatingSystem = By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]");
         waitingForEvents.waitForAppearanceInvisibilityElementLocatedBy(operatingSystem);
         driver.findElement(operatingSystem).click();
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuMachineClass(String element) {
+    public void selectElementFromMenuMachineClass(String element) {
         waitingForEvents.waitForAppearanceClickableElementAndClick(menuMachineClass);
         waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//md-option[@id='select_option_78' or @id='select_option_79']/div[contains (text(),'" +element+ "')]"));
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuSeries(String element) {
+    public void selectElementFromMenuSeries(String element) {
         series.click();
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuMachineType(String element) {
+    public void selectElementFromMenuMachineType(String element) {
         machineType.click();
         waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]"));
         driver.findElement(By.xpath("//div[contains (text(),'" +element+ "')]")).click();
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuNumberOfGPU() {
+    public void selectElementFromMenuNumberOfGPU() {
         waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//md-select-value[@id='select_value_label_392']"));
         driver.findElement(By.cssSelector("#select_option_399 > div.md-text.ng-binding")).click();
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuTypeGPU(String element) {
+    public void selectElementFromMenuTypeGPU(String element) {
         waitingForEvents.waitForAppearanceClickableElementAndClick(typeGPU);
         waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']"));
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuLocalSSD(String element) {
+    public void selectElementFromMenuLocalSSD(String element) {
         waitingForEvents.waitForAppearanceElementAndClick(localSSD);
         waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_355' and @aria-expanded='true']"));
         waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//div[contains (text(),'" +element+ "')]"));
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuDatacenterLocation(String element) {
+    public void selectElementFromMenuDatacenterLocation(String element) {
         waitingForEvents.waitForAppearanceElementAndClick(datacenterLocation);
         waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_92' and @aria-expanded='true']"));
         waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]"));
-        return this;
     }
 
-    public PricingCalculatorPage selectElementFromMenuCommitedUsage(String element) {
+    public void selectElementFromMenuCommitedUsage(String element) {
         commitedUsage.click();
         driver.findElement(By.xpath("//div[@id='select_container_100']//div[text()='" +element+ "']")).click();
-        return this;
     }
 
     public Boolean isVirtualMachineClassCorrect(String virtualMachineClass) {
-        return ("VM class: " + virtualMachineClass)
-                .equalsIgnoreCase(driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'VM class: " +virtualMachineClass.toLowerCase()+ "')]")).getText());
+        String actualVirtualMachineClass = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'VM class: " +virtualMachineClass.toLowerCase()+ "')]")).getText();
+        logger.info("EXPECTED: VM class: " + virtualMachineClass + "; ACTUAL: " + actualVirtualMachineClass);
+        return ("VM class: " + virtualMachineClass).equalsIgnoreCase(actualVirtualMachineClass);
     }
 
     public Boolean isInstanceTypeCorrect(String instanceType) {
-        return ("Instance type: " + instanceType)
-                .equals(driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Instance type: " +instanceType+ "')]")).getText());
+        String actualInstanceType = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Instance type: " +instanceType+ "')]")).getText();
+        logger.info("EXPECTED: Instance type: " + instanceType + "; ACTUAL: " + actualInstanceType);
+        return ("Instance type: " + instanceType).equals(actualInstanceType);
     }
 
     public Boolean isDataCenterLocationCorrect(String region) {
-        return ("Region: " + region)
-                .equals(driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Region: " +region+ "')]")).getText());
+        String actualRegion = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Region: " +region+ "')]")).getText();
+        logger.info("EXPECTED: Region: " + region + "; ACTUAL: " + actualRegion);
+        return ("Region: " + region).equals(actualRegion);
     }
 
     public Boolean isLocalSSDCorrect(String localSSD) {
-        return ("Total available local SSD space " + localSSD + " GiB")
-                .equals(driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Total available local SSD space " +localSSD+ " GiB')]")).getText());
+        String actualLocalSSD = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Total available local SSD space " +localSSD+ " GiB')]")).getText();
+        logger.info("EXPECTED: Total available local SSD space " + localSSD + " GiB" + "; ACTUAL: " + actualLocalSSD);
+        return ("Total available local SSD space " + localSSD + " GiB").equals(actualLocalSSD);
     }
 
     public Boolean isCommitmentTermCorrect(String commitmentTerm) {
-        return ("Commitment term: " + commitmentTerm)
-                .equals(driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Commitment term: " +commitmentTerm+ "')]")).getText());
+        String actualCommitmentTerm = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Commitment term: " +commitmentTerm+ "')]")).getText();
+        logger.info("EXPECTED: Commitment term: " + commitmentTerm + "; ACTUAL: " + actualCommitmentTerm);
+        return ("Commitment term: " + commitmentTerm).equals(actualCommitmentTerm);
     }
 
     public Boolean isEstimatedCostPerMonthCorrect(String cost) {
-        return ("Total Estimated Cost: " + cost + " per 1 month")
-                .equals(driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//h2[@class='md-title']/b[contains (text(), '" +cost+ "')]")).getText());
+        String actualCost = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//h2[@class='md-title']/b[contains (text(), '" +cost+ "')]")).getText();
+        logger.info("EXPECTED: Total Estimated Cost: " + cost + " per 1 month" + "; ACTUAL: " + actualCost);
+        return ("Total Estimated Cost: " + cost + " per 1 month").equals(actualCost);
+    }
+
+    public void fillInFields() {
+        computeEngine = ComputeEngineCreator.withCredentialsFromProperty();
+        switchToFrame("myFrame");
+        clickSectionComputeEngine();
+        inputNumberOfInstances(computeEngine.getNumberOfInstances());
+        selectElementFromMenuOperatingSystemAndSoftware(computeEngine.getOperatingSystemAndSoftware());
+        selectElementFromMenuMachineClass(computeEngine.getVirtualMachineClass());
+        selectElementFromMenuSeries(computeEngine.getSeries());
+        selectElementFromMenuMachineType(computeEngine.getInstanceType());
+        selectCheckBoxAddGPU();
+        selectElementFromMenuNumberOfGPU();
+        selectElementFromMenuTypeGPU(computeEngine.getTypeGPU());
+        selectElementFromMenuLocalSSD(computeEngine.getLocalSSD());
+        selectElementFromMenuDatacenterLocation(computeEngine.getDataCenterLocation());
+        selectElementFromMenuCommitedUsage(computeEngine.getCommitedUsage());
+        clickAddToEstimateButton();
+    }
+
+    public Boolean isCorrect(String estimatedCostPerMonthFromEmail) {
+        return isVirtualMachineClassCorrect(computeEngine.getVirtualMachineClass()) &&
+                isInstanceTypeCorrect(computeEngine.getInstanceType()) &&
+                isDataCenterLocationCorrect(computeEngine.getDataCenterLocation()) &&
+                isLocalSSDCorrect(computeEngine.getLocalSSD()) &&
+                isCommitmentTermCorrect(computeEngine.getCommitedUsage()) &&
+                isEstimatedCostPerMonthCorrect(computeEngine.getEstimatedCostPerMonth()) &&
+                isEstimatedCostPerMonthCorrect(estimatedCostPerMonthFromEmail);
+
     }
 
 }
