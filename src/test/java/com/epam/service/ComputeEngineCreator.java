@@ -15,7 +15,7 @@ public class ComputeEngineCreator {
     public static final String COMMITED_USAGE = "testdata.commited-usage";
     public static final String ESTIMATED_COST = "testdata.estimated-cost";
 
-    public static ComputeEngine withCredentialsFromProperty() {
+    public static ComputeEngine getComputeEngineWithCredentialsFromProperty() {
         return new ComputeEngine(TestDataReader.getTestData(NUMBER_OF_INSTANCES),
                 TestDataReader.getTestData(OPERATING_SYSTEM),
                 TestDataReader.getTestData(VIRTUAL_MACHINE_CLASS),

@@ -1,6 +1,6 @@
 package com.epam.page;
 
-import com.epam.service.ComputeEngineCreator;
+import com.epam.model.ComputeEngine;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -126,44 +126,47 @@ public class PricingCalculatorPage extends BasePage {
         driver.findElement(By.xpath("//div[@id='select_container_100']//div[text()='" +element+ "']")).click();
     }
 
-    public Boolean isVirtualMachineClassCorrect(String virtualMachineClass) {
-        String actualVirtualMachineClass = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'VM class: " +virtualMachineClass.toLowerCase()+ "')]")).getText();
-        logger.info("EXPECTED: VM class: " + virtualMachineClass + "; ACTUAL: " + actualVirtualMachineClass);
-        return ("VM class: " + virtualMachineClass).equalsIgnoreCase(actualVirtualMachineClass);
+    public Boolean isVirtualMachineClassCorrect(String expectedResult) {
+        String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'VM class: " +expectedResult.toLowerCase()+ "')]")).getText();
+        logger.info("EXPECTED: VM class: " + expectedResult + " | ACTUAL: " + actualResult);
+        return ("VM class: " + expectedResult).equalsIgnoreCase(actualResult);
     }
 
-    public Boolean isInstanceTypeCorrect(String instanceType) {
-        String actualInstanceType = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Instance type: " +instanceType+ "')]")).getText();
-        logger.info("EXPECTED: Instance type: " + instanceType + "; ACTUAL: " + actualInstanceType);
-        return ("Instance type: " + instanceType).equals(actualInstanceType);
+    public Boolean isInstanceTypeCorrect(String expectedResult) {
+        String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Instance type: " +expectedResult+ "')]")).getText();
+        logger.info("EXPECTED: Instance type: " + expectedResult + " | ACTUAL: " + actualResult);
+        return ("Instance type: " + expectedResult).equals(actualResult);
     }
 
-    public Boolean isDataCenterLocationCorrect(String region) {
-        String actualRegion = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Region: " +region+ "')]")).getText();
-        logger.info("EXPECTED: Region: " + region + "; ACTUAL: " + actualRegion);
-        return ("Region: " + region).equals(actualRegion);
+    public Boolean isDataCenterLocationCorrect(String expectedResult) {
+        String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Region: " +expectedResult+ "')]")).getText();
+        logger.info("EXPECTED: Region: " + expectedResult + " | ACTUAL: " + actualResult);
+        return ("Region: " + expectedResult).equals(actualResult);
     }
 
-    public Boolean isLocalSSDCorrect(String localSSD) {
-        String actualLocalSSD = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Total available local SSD space " +localSSD+ " GiB')]")).getText();
-        logger.info("EXPECTED: Total available local SSD space " + localSSD + " GiB" + "; ACTUAL: " + actualLocalSSD);
-        return ("Total available local SSD space " + localSSD + " GiB").equals(actualLocalSSD);
+    public Boolean isLocalSSDCorrect(String expectedResult) {
+        String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Total available local SSD space " +expectedResult+ " GiB')]")).getText();
+        logger.info("EXPECTED: Total available local SSD space " + expectedResult + " GiB" + " | ACTUAL: " + actualResult);
+        return ("Total available local SSD space " + expectedResult + " GiB").equals(actualResult);
     }
 
-    public Boolean isCommitmentTermCorrect(String commitmentTerm) {
-        String actualCommitmentTerm = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Commitment term: " +commitmentTerm+ "')]")).getText();
-        logger.info("EXPECTED: Commitment term: " + commitmentTerm + "; ACTUAL: " + actualCommitmentTerm);
-        return ("Commitment term: " + commitmentTerm).equals(actualCommitmentTerm);
+    public Boolean isCommitmentTermCorrect(String expectedResult) {
+        String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Commitment term: " +expectedResult+ "')]")).getText();
+        logger.info("EXPECTED: Commitment term: " + expectedResult + " | ACTUAL: " + actualResult);
+        return ("Commitment term: " + expectedResult).equals(actualResult);
     }
 
-    public Boolean isEstimatedCostPerMonthCorrect(String cost) {
-        String actualCost = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//h2[@class='md-title']/b[contains (text(), '" +cost+ "')]")).getText();
-        logger.info("EXPECTED: Total Estimated Cost: " + cost + " per 1 month" + "; ACTUAL: " + actualCost);
-        return ("Total Estimated Cost: " + cost + " per 1 month").equals(actualCost);
+    public Boolean isEstimatedCostPerMonthCorrect(String expectedResult) {
+        String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//h2[@class='md-title']/b[contains (text(), '" +expectedResult+ "')]")).getText();
+        logger.info("EXPECTED: Total Estimated Cost: " + expectedResult + " per 1 month" + " | ACTUAL: " + actualResult);
+        return ("Total Estimated Cost: " + expectedResult + " per 1 month").equals(actualResult);
     }
 
-    public void fillInFields() {
-        computeEngine = ComputeEngineCreator.withCredentialsFromProperty();
+    public void setComputeEngine(ComputeEngine computeEngine) {
+        this.computeEngine = computeEngine;
+    }
+
+    public void selectCharacteristicsOfComputeEngine() {
         switchToFrame("myFrame");
         clickSectionComputeEngine();
         inputNumberOfInstances(computeEngine.getNumberOfInstances());
@@ -188,7 +191,6 @@ public class PricingCalculatorPage extends BasePage {
                 isCommitmentTermCorrect(computeEngine.getCommitedUsage()) &&
                 isEstimatedCostPerMonthCorrect(computeEngine.getEstimatedCostPerMonth()) &&
                 isEstimatedCostPerMonthCorrect(estimatedCostPerMonthFromEmail);
-
     }
 
 }

@@ -145,4 +145,5 @@ public class ComputeEngine {
     public int hashCode() {
         return Objects.hash(numberOfInstances, operatingSystemAndSoftware, virtualMachineClass, series, instanceType, typeGPU, localSSD, dataCenterLocation, commitedUsage, estimatedCostPerMonth);
     }
+
 }
