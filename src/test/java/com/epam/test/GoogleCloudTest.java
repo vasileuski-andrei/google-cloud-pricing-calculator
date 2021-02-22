@@ -1,5 +1,6 @@
 package com.epam.test;
 
+import com.epam.model.ComputeEngine;
 import com.epam.service.ComputeEngineCreator;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -12,8 +13,8 @@ public class GoogleCloudTest extends BaseTest {
         homePage = navigationService.openPage("https://cloud.google.com/");
         Assert.assertTrue(navigationService.isWebsiteCorrect());
         pricingCalculatorPage = homePage.searchPricingCalculatorPage("Google Cloud Platform Pricing Calculator");
-        pricingCalculatorPage.setComputeEngine(ComputeEngineCreator.getComputeEngineWithCredentialsFromProperty());
-        pricingCalculatorPage.selectCharacteristicsOfComputeEngine();
+        ComputeEngine computeEngine = ComputeEngineCreator.getComputeEngineWithCredentialsFromProperty();
+        pricingCalculatorPage.selectCharacteristicsOfComputeEngine(computeEngine);
 
         emailYourEstimatePage = pricingCalculatorPage.clickEmailEstimateButton();
         emailYourEstimatePage.waitForAppearanceOfEmailYourEstimateForm();
@@ -36,7 +37,7 @@ public class GoogleCloudTest extends BaseTest {
         navigationService.switchToPreviousTab();
         pricingCalculatorPage.switchToFrame("myFrame");
 
-        Assert.assertTrue(pricingCalculatorPage.isCorrect(estimatedCostPerMonthFromEmail));
+        Assert.assertTrue(pricingCalculatorPage.isCorrect(computeEngine, estimatedCostPerMonthFromEmail));
 
     }
 

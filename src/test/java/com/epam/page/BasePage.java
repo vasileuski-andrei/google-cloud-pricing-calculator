@@ -1,7 +1,6 @@
 package com.epam.page;
 
 import com.epam.driver.DriverSingleton;
-import com.epam.model.ComputeEngine;
 import com.epam.waits.WaitingForEvents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +11,6 @@ public class BasePage {
 
     protected WebDriver driver;
     protected WaitingForEvents waitingForEvents;
-    protected ComputeEngine computeEngine;
     protected final Logger logger = LogManager.getRootLogger();
 
     public BasePage() {

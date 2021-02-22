@@ -129,44 +129,40 @@ public class PricingCalculatorPage extends BasePage {
     public Boolean isVirtualMachineClassCorrect(String expectedResult) {
         String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'VM class: " +expectedResult.toLowerCase()+ "')]")).getText();
         logger.info("EXPECTED: VM class: " + expectedResult + " | ACTUAL: " + actualResult);
-        return ("VM class: " + expectedResult).equalsIgnoreCase(actualResult);
+        return actualResult.contains(expectedResult.toLowerCase());
     }
 
     public Boolean isInstanceTypeCorrect(String expectedResult) {
         String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Instance type: " +expectedResult+ "')]")).getText();
         logger.info("EXPECTED: Instance type: " + expectedResult + " | ACTUAL: " + actualResult);
-        return ("Instance type: " + expectedResult).equals(actualResult);
+        return actualResult.contains(expectedResult);
     }
 
     public Boolean isDataCenterLocationCorrect(String expectedResult) {
         String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Region: " +expectedResult+ "')]")).getText();
         logger.info("EXPECTED: Region: " + expectedResult + " | ACTUAL: " + actualResult);
-        return ("Region: " + expectedResult).equals(actualResult);
+        return actualResult.contains(expectedResult);
     }
 
     public Boolean isLocalSSDCorrect(String expectedResult) {
         String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Total available local SSD space " +expectedResult+ " GiB')]")).getText();
         logger.info("EXPECTED: Total available local SSD space " + expectedResult + " GiB" + " | ACTUAL: " + actualResult);
-        return ("Total available local SSD space " + expectedResult + " GiB").equals(actualResult);
+        return actualResult.contains(expectedResult);
     }
 
     public Boolean isCommitmentTermCorrect(String expectedResult) {
         String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//div[contains (text(), 'Commitment term: " +expectedResult+ "')]")).getText();
         logger.info("EXPECTED: Commitment term: " + expectedResult + " | ACTUAL: " + actualResult);
-        return ("Commitment term: " + expectedResult).equals(actualResult);
+        return actualResult.contains(expectedResult);
     }
 
     public Boolean isEstimatedCostPerMonthCorrect(String expectedResult) {
         String actualResult = driver.findElement(By.xpath("//md-card-content[@id='resultBlock']//h2[@class='md-title']/b[contains (text(), '" +expectedResult+ "')]")).getText();
         logger.info("EXPECTED: Total Estimated Cost: " + expectedResult + " per 1 month" + " | ACTUAL: " + actualResult);
-        return ("Total Estimated Cost: " + expectedResult + " per 1 month").equals(actualResult);
+        return actualResult.contains(expectedResult);
     }
 
-    public void setComputeEngine(ComputeEngine computeEngine) {
-        this.computeEngine = computeEngine;
-    }
-
-    public void selectCharacteristicsOfComputeEngine() {
+    public void selectCharacteristicsOfComputeEngine(ComputeEngine computeEngine) {
         switchToFrame("myFrame");
         clickSectionComputeEngine();
         inputNumberOfInstances(computeEngine.getNumberOfInstances());
@@ -183,7 +179,7 @@ public class PricingCalculatorPage extends BasePage {
         clickAddToEstimateButton();
     }
 
-    public Boolean isCorrect(String estimatedCostPerMonthFromEmail) {
+    public Boolean isCorrect(ComputeEngine computeEngine, String estimatedCostPerMonthFromEmail) {
         return isVirtualMachineClassCorrect(computeEngine.getVirtualMachineClass()) &&
                 isInstanceTypeCorrect(computeEngine.getInstanceType()) &&
                 isDataCenterLocationCorrect(computeEngine.getDataCenterLocation()) &&
